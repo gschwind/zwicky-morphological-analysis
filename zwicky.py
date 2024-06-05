@@ -48,7 +48,7 @@ class MorphologicalAnalysis(object):
 		
 			if exclusion_applies == (len(e) - 1) / 2:
 				if len(e) > 2 + 1:
-					if verbose: print '%s%s=%s REJECTED by ' % ('  '*depth, variablename, o), e
+					if verbose: print('%s%s=%s REJECTED by ' % ('  '*depth, variablename, o), e)
 				prohibited = True
 				break
 		if prohibited:
@@ -72,7 +72,10 @@ class MorphologicalAnalysis(object):
 			branches.append((i, remainder, ngood, ntotal))
 		
 		# sort by reduction
-		branches.sort(key=lambda (i, remainder, ngood, notal): -1 if ngood < 1 else 0 if ngood == 1 else ngood * 1. / ntotal)
+		def _get_key(arg0):
+			i, remainder, ngood, notal = arg0
+			return -1 if ngood < 1 else 0 if ngood == 1 else ngood * 1. / ntotal
+		branches.sort(key=_get_key)
 		# choose variable with highest reduction
 		choice, remainder, ngood, ntotal = branches[0]
 		#print '%s-->' % (' '*depth), self.board[choice][0], ' (%d options of %d)' % (ngood, ntotal)
@@ -99,9 +102,9 @@ class MorphologicalAnalysis(object):
 				child = r
 			if child is None: continue
 			#print '  found allowed: ', o
-			if verbose: print '%sLets assume %s=%s.' % (' '*depth, variablename, o)
+			if verbose: print('%sLets assume %s=%s.' % (' '*depth, variablename, o))
 			for solution in self.search(child, depth + 1, verbose=verbose):
 				yield solution
-			if verbose: print
+			if verbose: print()
 
 
